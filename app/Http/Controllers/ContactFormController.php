@@ -15,7 +15,7 @@ class ContactFormController extends Controller
      */
     public function index()
     {
-        return view('contact');
+        return view('welcome');
     }
 
     /**
@@ -23,18 +23,9 @@ class ContactFormController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(ContactFormRequest $request)
+    public function create()
     {
-
-        $model = ContactForm::create($request->validated());
-
-        if ($request->hasFile('file')) {
-            $fileName = time().'.'.$request->file->extension();
-            $path = $request->file('file')->storeAs('documents', $fileName, 'public');
-            $model->update(['file' => $path]);
-        }
-
-        return redirect(route('index'))->with('status', 'Form submitted');;
+        return view('contact-us');
     }
 
     /**
@@ -43,53 +34,17 @@ class ContactFormController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ContactFormRequest $request)
     {
-        //
+        $model = ContactForm::create($request->validated());
+
+        if ($request->hasFile('file')) {
+            $fileName = time().'.'.$request->file->extension();
+            $path = $request->file('file')->storeAs('documents', $fileName, 'public');
+            $model->update(['file' => $path]);
+        }
+
+        return redirect(route('show.form'))->with('status', 'Form submitted');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\ContactForm  $contactForm
-     * @return \Illuminate\Http\Response
-     */
-    public function show(ContactForm $contactForm)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\ContactForm  $contactForm
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(ContactForm $contactForm)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ContactForm  $contactForm
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, ContactForm $contactForm)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\ContactForm  $contactForm
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(ContactForm $contactForm)
-    {
-        //
-    }
 }
