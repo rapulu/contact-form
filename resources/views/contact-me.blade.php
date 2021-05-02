@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Contact form</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
     </head>
     <body class="antialiased">
@@ -10,7 +15,7 @@
                     <div class="col-md-6 offset-md-3">
                         <div class="card">
                             <div class="card-header">
-                                Contact us
+                                Contact me
                             </div>
                             <div class="card-body">
                                 @if (session('status'))
@@ -18,36 +23,43 @@
                                         {{ session('status') }}
                                     </div>
                                 @endif
-                                @if (count($errors) > 0)
-                                    <div class="alert alert-danger">
-                                        <strong>Whoops!</strong> There were some problems with your input.
-                                        <ul>
-                                            @foreach ($errors->all() as $error)
-                                                <li>{{ $error }}</li>
-                                            @endforeach
-                                        </ul>
+                                @if (session('chill'))
+                                    <div class="alert alert-warning" role="alert">
+                                        {{ session('chill') }}
                                     </div>
                                 @endif
                                 <form action="{{ route('send.form') }}" method="post" enctype="multipart/form-data">
                                     @csrf
-                                    <div class="form-group">
+                                    <div class="mb-3">
                                         <label for="name">First Name</label>
-                                        <input type="text" name="name" placeholder="Your name.." class="form-control">
+                                        <input type="text" name="name" placeholder="Your name.." class="form-control" value="{{ @old('name') }}">
+                                        @if ($errors->has('name'))
+                                            <div style="color: red">{{ $errors->first('name') }}</div>
+                                        @endif
                                     </div>
 
-                                    <div class="form-group">
+                                    <div class="mb-3">
                                         <label for="email">Email</label>
-                                        <input type="text"name="email" placeholder="Your email" class="form-control">
+                                        <input type="text" name="email" placeholder="Your email" class="form-control" value="{{ @old('email') }}">
+                                        @if ($errors->has('email'))
+                                            <div style="color: red">{{ $errors->first('email') }}</div>
+                                        @endif
                                     </div>
 
-                                    <div class="form-group">
+                                    <div class="mb-3">
                                         <label for="message">Message</label>
-                                        <textarea name="message" placeholder="Write something.." class="form-control"></textarea>
+                                        <textarea name="message" placeholder="Write something.." class="form-control">{{ @old('message') }}</textarea>
+                                        @if ($errors->has('message'))
+                                            <div style="color: red">{{ $errors->first('message') }}</div>
+                                        @endif
                                     </div>
 
-                                    <div class="form-group">
+                                    <div class="mb-3">
                                         <label for="File">File</label>
                                         <input type="file" name="file" class="form-control">
+                                        @if ($errors->has('file'))
+                                            <div style="color: red">{{ $errors->first('file') }}</div>
+                                        @endif
                                     </div>
                                     <button type="submit" class="btn btn-primary float-right">Submit</button>
                                 </form>

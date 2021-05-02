@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ContactFormEvent;
 use App\Http\Requests\ContactFormRequest;
 use App\Models\ContactForm;
 use Illuminate\Http\Request;
@@ -25,7 +26,7 @@ class ContactFormController extends Controller
      */
     public function create()
     {
-        return view('contact-us');
+        return view('contact-me');
     }
 
     /**
@@ -34,17 +35,25 @@ class ContactFormController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ContactFormRequest $request)
+    public function store(ContactFormRequest $request, ContactForm $contactForm)
     {
-        $model = ContactForm::create($request->validated());
+        if (!$contactForm->canSubmitForm($request->email)) {
+            $warning = 'Hey, give the form 5mins before you submit another one.';
+            return back()->withInput()->with('chill', $warning);
+        }
+
+        $contactForm = ContactForm::create($request->validated());
 
         if ($request->hasFile('file')) {
             $fileName = time().'.'.$request->file->extension();
             $path = $request->file('file')->storeAs('documents', $fileName, 'public');
-            $model->update(['file' => $path]);
+            $contactForm->update(['file' => $path]);
         }
 
+        event(new ContactFormEvent($contactForm));
+
         return redirect(route('show.form'))->with('status', 'Form submitted');
+
     }
 
 }
