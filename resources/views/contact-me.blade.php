@@ -55,7 +55,7 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        <label for="File">File</label>
+                                        <label for="File">File <small>(.pdf, .xlsx and .csv only)</small></label>
                                         <input type="file" name="file" class="form-control">
                                         @if ($errors->has('file'))
                                             <div style="color: red">{{ $errors->first('file') }}</div>

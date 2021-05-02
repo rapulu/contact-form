@@ -31,6 +31,6 @@ class ContactFormMail extends Mailable implements ShouldQueue
     {
         return $this->from($this->contactForm->email)
                     ->subject('Contact form')
-                    ->view('mail.contact-mail');
+                    ->view('mail.contact-mail', ['contactForm' => $this->contactForm]);
     }
 }
