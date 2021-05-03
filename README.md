@@ -1,6 +1,6 @@
 #Contact form application
 
-This is a simple contact me form application where visitors can send message and also have option of sending file like pdf.
+This is a simple contact me form application where visitors can send me message and also have option of sending file like pdf.
 
 Setup
 
