@@ -24,3 +24,5 @@ Serve the application on the PHP development server
 Run the command below to start processing jobs on the queue as a daemon
 `php artisan queue:work`
 
+Run the application tests
+`php artisan test`
